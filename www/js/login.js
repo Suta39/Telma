@@ -34,9 +34,9 @@ function register_send() {
     data:sendData,
     success: function (msg) {
       console.log(JSON.stringify(msg));
-        ons.notification.alert({
-          title:"登録成功！",
-          message:"入力されたemailに登録用urlを送信しましたのでご確認ください。"
+      ons.notification.alert({
+        title:"登録成功！",
+        message:"入力されたemailに登録用urlを送信しましたのでご確認ください。"
       });
     },
     error:function(xhr,status,error){
@@ -72,7 +72,8 @@ function login() {
       if(msg.status=="ok"){
         myNavigator.replacePage("splitter.html",{animation:"fade"}).then(function(){
             ons.ready(function(){
-                $("#testes").html(msg.data[0].fullname)
+                $("#main-myname").html(msg.data[0].fullname);
+                bbsList();
             })
         })
         
