@@ -3,7 +3,8 @@
 
 //定数
 //var _domain = "https://exout.net/~kashima_dollars/telma_srv";
-var _domain = "https://it2-sotuken.herokuapp.com"
+var _domain = "https://exout.net/~kashima_dollars/telma_srv";
+var _domain1 = "https://it2-sotuken.herokuapp.com"
 //var _domain = "http://192.168.10.100/telma_server";
 //var _domain = "http://suta39.php.xdomain.jp/telma_server";
 //var _domain = "http://192.168.10.102:3000";

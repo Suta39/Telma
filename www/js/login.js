@@ -30,7 +30,7 @@ function register_send() {
   };
   $.ajax({
     type: "POST",
-    url: _domain+"/register",
+    url: _domain1+"/register",
     data:sendData,
     success: function (msg) {
       console.log(JSON.stringify(msg));
@@ -65,7 +65,7 @@ function login() {
 
   $.ajax({
     type: "POST",
-    url: _domain+"/login",
+    url: _domain1+"/login",
     data:data,
     success: function (msg) {
         console.log(msg)
@@ -105,7 +105,7 @@ function reset_pass() {
   //alert(email+"/"+password);
   $.ajax({
     type: "POST",
-    url: _domain+"/reset_pass",
+    url: _domain1+"/reset_pass",
     data:send_data,
     success: function (msg) {
       ons.notification.alert({
