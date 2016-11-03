@@ -15,13 +15,18 @@
   <div style="padding: 5px 30px">
     <textarea id="rent-content" class="textarea" ng-model="text2" placeholder="内容" rows="8" cols="30" ></textarea>
   </div>
-  <div style="padding: 8px 30px 0px 0px;">
-    <label for="bbsImg" style="width:70px;float:right">
+  <div id="readform" style="margin:3px 0;text-align: center;display:none">image.png</div>
+    <div style="padding: 8px 30px 0px 15px;">
+    <label for="image" style="width:70px;float:left">
       <ons-button>
         <ons-icon icon="ion-images" size="2x"></ons-icon>
       </ons-button>
-      <input type="file" id="bbsImg" style="display:none;" onchange="imgUp(this)">
+      <input type="file" id="image" style="display:none;" onchange="FileStatus()" onload="FileStatus()">
     </label>
-    <ons-button modifier="large" style="width:150px;" onclick="rentWrite()">記事を投稿</ons-button>
+    <ons-button style="float:left;margin-left:5px">
+      アイコン
+      <ons-icon icon="" size="2x"></ons-icon>
+    </ons-button>
+    <ons-button id="sendBtn" modifier="large" style="width:auto;padding:0 40px" onclick="rentWrite()">記事を投稿</ons-button>
   </div>
 </ons-page>

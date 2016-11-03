@@ -3,7 +3,14 @@
 //記事投稿
 function rentWrite(){
   var title = $("#rent-title").val();
-	var content = $("#rent-content").val();
+  var content = $("#rent-content").val();
+  var imgname = $("#image").val();
+  var fd = new FormData();
+  if ($("#image").val()!== '') {
+    imgname = $('#image')[0].files[0].name;
+    fd.append("file",$("#image").prop("files")[0]);
+    fd.append("image",$("#image").val());
+  }
   
   var sendData = {
     //session_id:_session_id,
@@ -13,7 +20,7 @@ function rentWrite(){
     ido:ido,
     keido:keido,
     limit:"3",
-    image:"rent.img"
+    image:imgname
   };
   
 	$.ajax({
@@ -21,8 +28,21 @@ function rentWrite(){
     url:_domain+"/kashikari.php?get1=post",
     data:sendData,
     success: function(msg){
-      myNavigator.popPage();
-      rentList()
+      $.ajax({
+          type: "POST",
+          url: _domain+"/rent.php?get1=image",
+          //url:_domain+"/keiji/post",
+          data:fd,
+          processData : false,
+          contentType : false,
+          dataType : "text",
+          success: function(msg){
+            if(msg=="true"){
+              myNavigator.popPage();
+              rentList();
+            }
+          }
+        });
     }
  	});
 }
@@ -37,8 +57,8 @@ function rentList(){
   };
   $.ajax({
     type: "GET",
-    //url:_domain+"/kashikari/list-all",
     url:_domain+"/kashikari.php?get1=list-all",
+    //url:_domain+"/postinfo.php?type=rent-list",
     data:sendData,
     success: function(msg){
       console.log("success!");
@@ -51,8 +71,8 @@ function rentList(){
         listDom.attr("onclick","rentDetail("+val.kashikari_id+")");
         listDom.find(".list__item__title").html(val.title);
         //listDom.find(".list__item__subtitle").html(val.content);
-        listDom.find(".date").html(formatDate(new Date(val.time)));
-      
+        listDom.find(".rent-list-date").html(formatDateTime(new Date(val.time)));
+        listDom.find(".rent-list-name").html(val.username);
         listDom.fadeIn().css("display","");
         //var cloneDom = listDom.clone(true);
         listDom.appendTo($("#rent-lists"));
@@ -93,18 +113,38 @@ function rentDetail(id){
           $("#rent-detail-var").html(msg.title);
           $("#rent-detail-title").html(msg.title);
           $("#rent-detail-content").html(msg.content);
-          $("#rent-detail-date").html(msg.time);
+          $("#rent-detail-date").html(formatDateTime(new Date(msg.time)));
+          $("#rent-detail-name").html(msg.name);
           $("#rent-reply").attr("onclick","RentReply("+msg.kashikari_id+")");
           switch(true){
             case msg.reply_flg == 2:
               $("#rent-reply").html("申請中");
+              $("#rent-reply").attr("onclick","");
               break;
             case msg.reply_flg == 3:
               $("#rent-reply").html("チャットへ");
+              $("#rent-reply").attr("onclick","");
               break;
             default:
               $("#rent-reply").attr("onclick","ReplyMsg("+id+")");
               break;
+          }
+          if(msg.image){
+            //console.log("read");
+            /* 画像読込 ********/
+            //画像ＵＲＬ
+            var url=_domain+"/RentImage/"+msg.image;
+            //画像用オブジェクトの作成
+            var imgLoader=new Image();
+            //onloadイベントハンドラ追加
+            imgLoader.onload=function() {
+              $("#image").css("display","");
+              //ロード完了で画像を表示
+              $("#image").attr("src",url);
+            }
+            //重要、最後に書く
+            imgLoader.src=url;
+            /*******************/
           }
         })
       });
@@ -115,7 +155,6 @@ function rentDetail(id){
   });
 }
 
-//貸す提案(メッセージフォームを開く)
 function ReplyMsg(id){
   openDialog('reply-msg');
   
@@ -124,7 +163,7 @@ function ReplyMsg(id){
   });
 }
 
-//貸す提案(メッセージ送信)
+//貸す提案
 function rentReply(id){
   //ons.notification.confirm({message:"本当に貸しますか？",title:null,modifier:"ios"}).then(function(result){
   var cmt = $("#replymsg").val();
@@ -143,7 +182,6 @@ function rentReply(id){
     }
   });
 }
-
 //
 function rentServerAgree(){
   
